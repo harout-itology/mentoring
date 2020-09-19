@@ -14,6 +14,38 @@
                         </div>
                     @endif
 
+                        <form method="POST" action="{{ route('mentoring.store') }}" enctype="multipart/form-data" >
+                            @csrf
+                            <div class="form-group row">
+                                <label for="file" class="col-md-2 col-form-label">{{ __('CSV File:') }}</label>
+                                <div class="col-md-8">
+                                    <input id="file" type="file" class="form-control-file @error('file') is-invalid @enderror" name="file" required autofocus>
+                                    @error('file')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6 offset-md-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="header" id="header" checked>
+                                        <label class="form-check-label" for="header">
+                                            {{ __('File contains header row?') }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6 offset-md-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        {{ __('Parse CSV') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
                 </div>
             </div>
         </div>
