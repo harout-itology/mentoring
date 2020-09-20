@@ -9,10 +9,10 @@ use Maatwebsite\Excel\Concerns\WithStartRow;
 
 class CsvImport implements ToCollection, WithValidation, WithStartRow
 {
-    public $first_row;
+    private $firstRow;
 
-    public function __construct($first_row){
-        $this->first_row = $first_row;
+    public function __construct($firstRow){
+        $this->firstRow = $firstRow;
     }
 
     /**
@@ -67,6 +67,6 @@ class CsvImport implements ToCollection, WithValidation, WithStartRow
      */
     public function startRow(): int
     {
-        return  $this->first_row;
+        return  $this->firstRow;
     }
 }
