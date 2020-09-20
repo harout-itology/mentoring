@@ -28,4 +28,16 @@ class CsvRequest extends FormRequest
             'file' => ['required', 'max:1024', 'mimes:csv,txt', new CsvRule]
         ];
     }
+
+    /**
+     * Get the validation error message.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'file.mimes' => 'The file must be a file of type: csv.'
+        ];
+    }
 }

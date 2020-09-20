@@ -22,6 +22,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('mentoring', 'MentoringController');
+    Route::post('/mentoring', 'MentoringController@store')->name('mentoring.store');
 });
 
