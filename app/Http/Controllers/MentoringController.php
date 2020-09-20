@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\CsvRequest;
 
 class MentoringController extends Controller
 {
@@ -32,9 +33,11 @@ class MentoringController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CsvRequest $request)
     {
-        return 1;
+        $path = $request->file('file')->getRealPath();
+        $data = array_map('str_getcsv', file($path));
+        return $data;
     }
 
     /**
