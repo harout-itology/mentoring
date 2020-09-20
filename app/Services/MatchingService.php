@@ -33,13 +33,24 @@ class MatchingService
     public function getListOfMatches($data)
     {
         $finalData = [];
+        $total = 0;
 
-        for($i = 0; $i < count($data); $i++)
-            for($j = $i+1; $j < count($data); $j++)
+        for($i = 0; $i < count($data); $i++) {
+            for ($j = $i + 1; $j < count($data); $j++) {
+                $score = $this->calculate($data[$i], $data[$j]);
                 $finalData[] = [
-                    'text'  => $data[$i][$this->nameMapping] . ' will be matched with ' . $data[$j][$this->nameMapping] ,
-                    'score' => $this->calculate($data[$i], $data[$j])
+                    'text' => $data[$i][$this->nameMapping] . ' will be matched with ' . $data[$j][$this->nameMapping],
+                    'score' => $score
                 ];
+                $total += $score;
+            }
+        }
+
+        // get highest average
+        $finalData[] = [
+            'text' => 'Employees the highest average match score ',
+            'score' => round($total / count($finalData))
+        ];
 
         return $finalData;
     }
