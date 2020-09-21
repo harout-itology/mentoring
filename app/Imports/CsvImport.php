@@ -48,7 +48,7 @@ class CsvImport implements ToCollection, WithValidation, WithStartRow
                 if (!$value) {
                     $onFailure('The Age column is a mandatory filed');
                 }
-                else if (!is_numeric($value)) {
+                else if (!is_numeric($value) || $value < 1) {
                     $onFailure('The Age column has an invalid value');
                 }
             },
