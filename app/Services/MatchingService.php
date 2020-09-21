@@ -27,6 +27,7 @@ class MatchingService
     ];
     // name position
     private $nameMapping = 0;
+    public $columnCount = 5;
     /* add new item to the array with the name of new column */
 
 

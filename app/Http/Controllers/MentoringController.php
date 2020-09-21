@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class MentoringController extends Controller
 {
-    private $count = 5;
-
     private $matchingService;
 
     public function __construct(MatchingService $service)
@@ -54,7 +52,7 @@ class MentoringController extends Controller
         $data = $data[0];
 
         // check column count
-        if(count($data[0]) < $this->count)
+        if(count($data[0]) < $this->matchingService->columnCount)
             return redirect()->back()->withErrors(['file' => 'The file must contain 5 columns.']);
 
         // check the matches
