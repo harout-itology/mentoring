@@ -8,6 +8,7 @@ use App\Imports\CsvImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
 use App\Services\MatchingService;
+use Illuminate\Support\Facades\Auth;
 
 class MentoringController extends Controller
 {
@@ -58,6 +59,10 @@ class MentoringController extends Controller
 
         // check the matches
         $data = $this->matchingService->getListOfMatches($data);
+
+        // log the user and the results
+        Log::info(Auth::user());
+        Log::info($data);
 
         return view('results', ['data' => $data]);
 
