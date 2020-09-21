@@ -28,10 +28,9 @@ class CsvRule implements Rule
         $types =[
             'application/csv',
             'text/csv',
-            //'application/excel',
-            //'application/vnd.ms-excel',
-            //'application/vnd.msexcel',
-            //'text/anytext',
+            'application/excel',
+            'application/vnd.ms-excel',
+            'application/vnd.msexcel',
             'text/comma-separated-values'
         ];
         if(in_array($value->getClientMimeType(), $types)){
@@ -50,3 +49,4 @@ class CsvRule implements Rule
         return 'The file must be a file of type: csv.';
     }
 }
+
