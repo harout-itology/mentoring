@@ -20,6 +20,10 @@ class MentoringController extends Controller
         $this->matchingService = $service;
     }
 
+    public function create (){
+        return redirect('/home');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -58,4 +62,5 @@ class MentoringController extends Controller
         return view('results', ['data' => $data]);
 
     }
+
 }
