@@ -32,7 +32,7 @@ class CsvRule implements Rule
             //'application/vnd.ms-excel',
             //'application/vnd.msexcel',
             //'text/anytext',
-            //'text/comma-separated-values'
+            'text/comma-separated-values'
         ];
         if(in_array($value->getClientMimeType(), $types)){
             return true;
