@@ -62,7 +62,7 @@ class MentoringController extends Controller
         Log::info(Auth::user());
         Log::info($data);
 
-        return view('results', ['data' => $data]);
+        return view('results', ['data' => $data['data'], 'average' => $data['average'], 'count' => $data['count']  ]);
 
     }
 

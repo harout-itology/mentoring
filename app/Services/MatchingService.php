@@ -30,30 +30,78 @@ class MatchingService
     public $columnCount = 5;
     /* add new item to the array with the name of new column */
 
-
     public function getListOfMatches($data)
     {
-        $finalData = [];
+        $matchesArray = [];
+        $arrayPointer = 0;
         $total = 0;
+        $count = 0;
 
+        // get the highest match for each employee separately
         for($i = 0; $i < count($data); $i++) {
             for ($j = $i + 1; $j < count($data); $j++) {
                 $score = $this->calculate($data[$i], $data[$j]);
-                $finalData[] = [
-                    'text' => $data[$i][$this->nameMapping] . ' will be matched with ' . $data[$j][$this->nameMapping],
-                    'score' => $score
-                ];
-                $total += $score;
+                // first match always add in $matchesArray
+                if(!$arrayPointer){
+                    $matchesArray[$arrayPointer++] = [
+                        'firstSide' => $data[$i][$this->nameMapping],
+                        'secondSide' => $data[$j][$this->nameMapping],
+                        'score' => $score
+                    ];
+                }
+                // if (the last firstside in $matchesArray is the same as the new firstside) and (the score is smaller than the new score) delete the last match in $matchesArray and add the new one
+                else if( ($matchesArray[$arrayPointer-1]['firstSide'] == $data[$i][$this->nameMapping]) && ($matchesArray[$arrayPointer-1]['score'] < $score) ){
+                    $matchesArray[$arrayPointer-1] = [
+                        'firstSide' => $data[$i][$this->nameMapping],
+                        'secondSide' => $data[$j][$this->nameMapping],
+                        'score' => $score
+                    ];
+                }
+                // if (the last firstside in $matchesArray is not the same as the new firstside) add the new one
+                else if( ($matchesArray[$arrayPointer-1]['firstSide'] != $data[$i][$this->nameMapping])) {
+                    $matchesArray[$arrayPointer++] = [
+                        'firstSide' => $data[$i][$this->nameMapping],
+                        'secondSide' => $data[$j][$this->nameMapping],
+                        'score' => $score
+                    ];
+                }
             }
         }
 
-        // get highest average
-        $finalData[] = [
-            'text' => 'Employees the highest average match score ',
-            'score' => round($total / count($finalData))
-        ];
+        // delete duplications
+        for($i = 0; $i < count($matchesArray); $i++){
+            if ( $duplications = array_keys(array_column($matchesArray, 'secondSide'), $matchesArray[$i]['firstSide'])) {
+                $max = $matchesArray[$i]['score'];
+                foreach ($duplications as $duplication) {
+                    if ( $matchesArray[$duplication]['score'] > $max) {
+                        $max = $matchesArray[$duplication]['score'];
+                    }
+                }
+                foreach ($duplications as $duplication) {
+                    if ($matchesArray[$duplication]['score'] < $max) {
+                        $matchesArray[$duplication]['score'] = 0;
+                    }
+                }
+                if($matchesArray[$i]['score'] < $max){
+                    $matchesArray[$i]['score'] = 0;
+                }
+            }
+        }
 
-        return $finalData;
+        // calculate the average
+        foreach ($matchesArray as $i => $match){
+            if($match['score']){
+                $total += $match['score'];
+                $count++;
+            }
+        }
+
+        return  [
+            'data' => $matchesArray,
+            'average' =>  $total/$count,
+            'count' => $count
+        ] ;
+
     }
 
     public function calculate($employeeFirst, $employeeSecond)
@@ -76,3 +124,4 @@ class MatchingService
     }
 
 }
+
