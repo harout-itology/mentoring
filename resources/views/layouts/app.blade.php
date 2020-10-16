@@ -18,6 +18,10 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <!-- Styles Custom -->
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+
 </head>
 <body>
     <div id="app">
@@ -41,7 +45,7 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('App Login') }}</a>
                             </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">

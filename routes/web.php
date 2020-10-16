@@ -20,3 +20,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/mentoring', 'MentoringController@store')->name('mentoring.store');
+    Route::get('/mentoring', 'MentoringController@create')->name('mentoring.create');
+});
+
