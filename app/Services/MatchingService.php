@@ -2,33 +2,20 @@
 
 namespace App\Services;
 
+
 class MatchingService
 {
-    /* add new column name to the array with the relevant value */
-    //  score of each condition
-    private $scores = [
-        'division' => 30,
-        'ageDifference' => 30,
-        'timezone' => 40
+    private $columns = [
+        ['name'=>'name', 'score'=>0, 'class'=>NULL, 'rule'=> 0],
+        ['name'=>'email', 'score'=>0, 'class'=>NULL, 'rule'=> 0],
+        ['name'=>'division', 'score'=>30, 'class'=>'App\Lib\CalculateEquality', 'rule'=> 0],
+        ['name'=>'ageDifference', 'score'=>30, 'class'=>'App\Lib\CalculateDifference', 'rule'=> 5],
+        ['name'=>'timezone', 'score'=>40, 'class'=>'App\Lib\CalculateEquality', 'rule'=>0]
     ];
-    //  position of each condition
-    private $mapping = [
-        'division' => 2,
-        'ageDifference' => 3,
-        'timezone' => 4
-    ];
-    //  condition action
-    //  0 => both must be the same or equal
-    //  other numbers will be the difference between them
-    private $rules = [
-        'division' => 0,
-        'ageDifference' => 5,
-        'timezone' => 0
-    ];
+
     // name position
     private $nameMapping = 0;
     public $columnCount = 5;
-    /* add new item to the array with the name of new column */
 
     public function getListOfMatches($data)
     {
@@ -68,26 +55,6 @@ class MatchingService
             }
         }
 
-        // delete duplications
-        for($i = 0; $i < count($matchesArray); $i++){
-            if ( $duplications = array_keys(array_column($matchesArray, 'secondSide'), $matchesArray[$i]['firstSide'])) {
-                $max = $matchesArray[$i]['score'];
-                foreach ($duplications as $duplication) {
-                    if ( $matchesArray[$duplication]['score'] > $max) {
-                        $max = $matchesArray[$duplication]['score'];
-                    }
-                }
-                foreach ($duplications as $duplication) {
-                    if ($matchesArray[$duplication]['score'] < $max) {
-                        $matchesArray[$duplication]['score'] = 0;
-                    }
-                }
-                if($matchesArray[$i]['score'] < $max){
-                    $matchesArray[$i]['score'] = 0;
-                }
-            }
-        }
-
         // calculate the average
         foreach ($matchesArray as $i => $match){
             if($match['score']){
@@ -108,14 +75,10 @@ class MatchingService
     {
         $employeeScore = 0;
 
-        foreach ($this->rules as $column => $action){
-            if($action){
-                if( abs($employeeFirst[$this->mapping[$column]] - $employeeSecond[$this->mapping[$column]]) <= $action )
-                    $employeeScore += $this->scores[$column];
-            }
-            else{
-                if(strtolower(trim($employeeFirst[$this->mapping[$column]])) == strtolower(trim($employeeSecond[$this->mapping[$column]])) )
-                    $employeeScore += $this->scores[$column];
+        foreach ($this->columns as $index => $column){
+            if($column['score']){
+                $calculates = new $column['class'];
+                $employeeScore += $calculates->calculate($employeeFirst, $employeeSecond, $index, $column['rule'], $column['score']);
             }
         }
 

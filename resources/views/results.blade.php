@@ -11,12 +11,10 @@
 
                     <ul class="list-group">
                         @foreach($data as $result)
-                            @if($result['score'])
-                                <li class="list-group-item d-flex justify-content-between align-items-center ">
-                                    {{ $result['firstSide'] }} {{ __('will be matched with') }} {{ $result['secondSide'] }}
-                                    <span class="badge badge-primary badge-pill"> {{ $result['score']  }}%</span>
-                                </li>
-                            @endif
+                            <li class="list-group-item d-flex justify-content-between align-items-center ">
+                                {{ $result['firstSide'] }} {{ __('will be matched with') }} {{ $result['secondSide'] }}
+                                <span class="badge badge-primary badge-pill"> {{ $result['score']  }}%</span>
+                            </li>
                         @endforeach
                             <li class="list-group-item d-flex justify-content-between align-items-center ">
                                 In the case of {{ $count }} employees the highest average match score is
