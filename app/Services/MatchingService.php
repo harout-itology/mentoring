@@ -55,6 +55,26 @@ class MatchingService
             }
         }
 
+        // delete duplications
+        for($i = 0; $i < count($matchesArray); $i++){
+            if ( $duplications = array_keys(array_column($matchesArray, 'secondSide'), $matchesArray[$i]['firstSide'])) {
+                $max = $matchesArray[$i]['score'];
+                foreach ($duplications as $duplication) {
+                    if ( $matchesArray[$duplication]['score'] > $max) {
+                        $max = $matchesArray[$duplication]['score'];
+                    }
+                }
+                foreach ($duplications as $duplication) {
+                    if ($matchesArray[$duplication]['score'] < $max) {
+                        $matchesArray[$duplication]['score'] = 0;
+                    }
+                }
+                if($matchesArray[$i]['score'] < $max){
+                    $matchesArray[$i]['score'] = 0;
+                }
+            }
+        }
+
         // calculate the average
         foreach ($matchesArray as $i => $match){
             if($match['score']){
