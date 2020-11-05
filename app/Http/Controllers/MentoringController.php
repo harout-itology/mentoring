@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\DataRead;
 use Illuminate\Http\Request;
 use App\Http\Requests\CsvRequest;
 use App\Imports\CsvImport;
@@ -59,8 +60,8 @@ class MentoringController extends Controller
         $data = $this->matchingService->getListOfMatches($data);
 
         // log the user and the results
-        Log::info(Auth::user());
-        Log::info($data);
+        // App\Listeners\LogListener
+        event(new DataRead(Auth::user(), $data));
 
         return view('results', ['data' => $data['data'], 'average' => $data['average'], 'count' => $data['count']  ]);
 
